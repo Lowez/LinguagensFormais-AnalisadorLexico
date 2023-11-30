@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(52, 57, 66);
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(37, 39, 43);
+    width: 100%;
+}
+
+header h1 {
+    padding: 0.2em;
+}
+
+main {
+    background-color: rgb(52, 57, 66);
+    background-size: auto;
+    min-height: 100%;
+}
+
+.words-inputs {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 0;
+}
+
+.insere-palavras, .busca-palavras {
+    position: absolute;
+}
+
+#savedWords {
+    /* margin: 1em 6% 1em 10%; */
+}
+
+#foundWords {
+    margin-top: 1em;
+}
+
+#savedWords span, #foundWords span {
+    margin: 0.2em;
+    font-size: 14px;
+}
+
+#automato {
+    /* margin: 1em 0; */
+}
+
+#automato th {
+    font-size: 14px;
+    width: 1%;
+}
+
+#automato tr.green{
+    background-color: greenyellow !important;
+}
+
+#automato tr.red{
+    background-color: red !important;
+}
+
+#automato tr.actual-state{
+    border: 2px solid #0046a8;
+}
