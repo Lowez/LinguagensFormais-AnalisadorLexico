@@ -13,7 +13,7 @@ const z = 'z'.charCodeAt(0);
 const espaco = 32;
 const apagar = 8;
 
-let automatoProprieties = {
+let automatoProperties = {
     'palavras': [],
     'automato': [],
     // Números do evento, para guiar o automato, q0, q1, q2, q3, ...
