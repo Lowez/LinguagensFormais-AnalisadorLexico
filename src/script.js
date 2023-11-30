@@ -17,10 +17,10 @@ let automatoProprieties = {
     'palavras': [],
     'automato': [],
     // Números do evento, para guiar o automato, q0, q1, q2, q3, ...
-    'qNum': 0,
+    'qTotal': 0,
 }
 
-let automatoMaquete = [
+let automatoWireframe = [
     []
 ];
 
@@ -43,22 +43,22 @@ $(document).ready(function() {
             // Gera o esqueleto que formará o automato, os estados e cada letra associada
             let maquete = [];
 
-            for(let i = 0; i < automatoMaquete.length; i++){
+            for(let i = 0; i < automatoWireframe.length; i++){
                 let tableCell = [];
                 tableCell['qX'] = i;
 
                 for(let j = a; j <= z; j++){
                     let letra = String.fromCharCode(j);
 
-                    if(!(letra in automatoMaquete[i])){
+                    if(!(letra in automatoWireframe[i])){
                         tableCell[letra] = null;
                     } else {
-                        tableCell[letra] = automatoMaquete[i][letra];
+                        tableCell[letra] = automatoWireframe[i][letra];
                     }
                 }
 
                 // Verifica se é estado final
-                tableCell['endState'] = automatoMaquete[i]['endState'] ? true : false;
+                tableCell['endState'] = automatoWireframe[i]['endState'] ? true : false;
                 
                 maquete.push(tableCell);
             }
@@ -142,23 +142,23 @@ function addWordToAutomato(palavraNova) {
                 let letra = palavra[j];
     
                 // Valida se é Estado Inicial
-                automatoMaquete[q]['initialState'] = j === 0;
+                automatoWireframe[q]['initialState'] = j === 0;
                 
-                if(!(q in automatoMaquete) || !(letra in automatoMaquete[q])){
-                    let nextState = automatoProprieties.qNum + 1;
-                    automatoMaquete[q][letra] = nextState;
-                    automatoMaquete[nextState] = [];
+                if(!(q in automatoWireframe) || !(letra in automatoWireframe[q])){
+                    let nextState = automatoProprieties.qTotal + 1;
+                    automatoWireframe[q][letra] = nextState;
+                    automatoWireframe[nextState] = [];
                     
                     q = nextState;
-                    automatoProprieties.qNum = nextState;
+                    automatoProprieties.qTotal = nextState;
     
                 } else {
                     // Caso a letra já esteja mapeada na linha do evento, a próxima linha a ser trabalhada será a linha do estado que é chamado pela letra existente
-                    q = automatoMaquete[q][letra];
+                    q = automatoWireframe[q][letra];
                 }
     
                 // Valida se é Estado Final
-                automatoMaquete[q]["endState"] = j === palavra.length - 1;
+                automatoWireframe[q]["endState"] = j === palavra.length - 1;
             }
         }
     }
@@ -202,17 +202,17 @@ function setAutomato(){
         const td = $('<td>');
 
         // Apenas coloca -> para estado inicial e * para estado final
-        if(automatoMaquete[j]['initialState']){
+        if(automatoWireframe[j]['initialState']){
             td.html('->' + 'q' + automatoProprieties.automato[j]['qX']);
             td.addClass('end');
             tr.addClass('end');
         } else
-        if (automatoMaquete[j]['endState']) {
+        if (automatoWireframe[j]['endState']) {
             td.html('*' + 'q' + automatoProprieties.automato[j]['qX']);
             td.addClass('end');
             tr.addClass('end');
         } else
-        if (automatoMaquete[j]['initialState'] && automatoMaquete[j]['endState']) {
+        if (automatoWireframe[j]['initialState'] && automatoWireframe[j]['endState']) {
             td.html('->' + '*' + 'q' + automatoProprieties.automato[j]['qX']);
             td.addClass('end');
             tr.addClass('end');
