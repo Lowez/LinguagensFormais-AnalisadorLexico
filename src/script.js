@@ -28,6 +28,7 @@ let automatoMaquete = [
     Ativa Listeners para os inputs e botões da página
 */
 $(document).ready(function() {
+    // Clique para adicionar nova palavra
     $('#addWord').click(function(event) {
         event.preventDefault();
 
@@ -56,11 +57,9 @@ $(document).ready(function() {
                     }
                 }
 
-                if(automatoMaquete[i]['endState']){
-                    tableCell['endState'] = true;
-                } else {
-                    tableCell['endState'] = false;
-                }
+                // Verifica se é estado final
+                tableCell['endState'] = automatoMaquete[i]['endState'] ? true : false;
+                
                 maquete.push(tableCell);
             }
 
@@ -143,11 +142,7 @@ function addWordToAutomato(palavraNova) {
                 let letra = palavra[j];
     
                 // Valida se é Estado Inicial
-                if (j == 0) {
-                    automatoMaquete[q]['initialState'] = true;
-                } else {
-                    automatoMaquete[q]['initialState'] = false;
-                }
+                automatoMaquete[q]['initialState'] = j === 0;
                 
                 if(!(q in automatoMaquete) || !(letra in automatoMaquete[q])){
                     let nextState = automatoProprieties.qNum + 1;
@@ -158,6 +153,7 @@ function addWordToAutomato(palavraNova) {
                     automatoProprieties.qNum = nextState;
     
                 } else {
+                    // Caso a letra já esteja mapeada na linha do evento, a próxima linha a ser trabalhada será a linha do estado que é chamado pela letra existente
                     q = automatoMaquete[q][letra];
                 }
     
