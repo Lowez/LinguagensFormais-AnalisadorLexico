@@ -37,7 +37,7 @@ $(document).ready(function() {
         let palavraNova = $('#addWordInput').val();
 
         // Caso palavra não exista no automato, adicionada ela na lista e no automato
-        if (automatoProprieties.palavras.indexOf(palavraNova) < 0) {
+        if (automatoProperties.palavras.indexOf(palavraNova) < 0) {
             addWordToAutomato(palavraNova);
 
             // Gera o esqueleto que formará o automato, os estados e cada letra associada
@@ -63,7 +63,7 @@ $(document).ready(function() {
                 maquete.push(tableCell);
             }
 
-            automatoProprieties.automato = maquete;
+            automatoProperties.automato = maquete;
             setAutomato();
         }
 
@@ -88,7 +88,7 @@ $(document).ready(function() {
         }
         
         // Filtra as palavras que iniciam com a palavra digitada
-        let filteredWords = automatoProprieties.palavras.filter(palavra => palavra.startsWith(palavraDigitada));
+        let filteredWords = automatoProperties.palavras.filter(palavra => palavra.startsWith(palavraDigitada));
 
         automatoValidation(palavraDigitada, event.which);
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
         let spaceSimulation = 32;
 
         // Filtra as palavras que iniciam com a palavra digitada
-        let filteredWords = automatoProprieties.palavras.filter(palavra => palavra.startsWith(palavra));
+        let filteredWords = automatoProperties.palavras.filter(palavra => palavra.startsWith(palavra));
 
         automatoValidation(palavraDigitada, spaceSimulation);
 
@@ -131,11 +131,11 @@ function addWordToAutomato(palavraNova) {
         listSavedWord(palavraNova);
 
         // Adiciona a palavra nova em um array junto com as outras
-        automatoProprieties.palavras.push(palavraNova);
+        automatoProperties.palavras.push(palavraNova);
 
         // Gera os estados do automato baseando-se nas palavras já adicionadas
-        for(let i = 0; i < automatoProprieties.palavras.length; i++){
-            let palavra = automatoProprieties.palavras[i];
+        for(let i = 0; i < automatoProperties.palavras.length; i++){
+            let palavra = automatoProperties.palavras[i];
             let q = 0;
     
             for(let j = 0; j < palavra.length; j++){
@@ -145,12 +145,12 @@ function addWordToAutomato(palavraNova) {
                 automatoWireframe[q]['initialState'] = j === 0;
                 
                 if(!(q in automatoWireframe) || !(letra in automatoWireframe[q])){
-                    let nextState = automatoProprieties.qTotal + 1;
+                    let nextState = automatoProperties.qTotal + 1;
                     automatoWireframe[q][letra] = nextState;
                     automatoWireframe[nextState] = [];
                     
                     q = nextState;
-                    automatoProprieties.qTotal = nextState;
+                    automatoProperties.qTotal = nextState;
     
                 } else {
                     // Caso a letra já esteja mapeada na linha do evento, a próxima linha a ser trabalhada será a linha do estado que é chamado pela letra existente
@@ -197,28 +197,28 @@ function setAutomato(){
 
     // Preenche a tabela com os dados
     const tbody = $('<tbody>');
-    for(let j = 0; j < automatoProprieties.automato.length; j++){
+    for(let j = 0; j < automatoProperties.automato.length; j++){
         const tr = $('<tr>');
         const td = $('<td>');
 
         // Apenas coloca -> para estado inicial e * para estado final
         if(automatoWireframe[j]['initialState']){
-            td.html('->' + 'q' + automatoProprieties.automato[j]['qX']);
+            td.html('->' + 'q' + automatoProperties.automato[j]['qX']);
             td.addClass('end');
             tr.addClass('end');
         } else
         if (automatoWireframe[j]['endState']) {
-            td.html('*' + 'q' + automatoProprieties.automato[j]['qX']);
+            td.html('*' + 'q' + automatoProperties.automato[j]['qX']);
             td.addClass('end');
             tr.addClass('end');
         } else
         if (automatoWireframe[j]['initialState'] && automatoWireframe[j]['endState']) {
-            td.html('->' + '*' + 'q' + automatoProprieties.automato[j]['qX']);
+            td.html('->' + '*' + 'q' + automatoProperties.automato[j]['qX']);
             td.addClass('end');
             tr.addClass('end');
         } else
         {
-            td.html('q' + automatoProprieties.automato[j]['qX']);
+            td.html('q' + automatoProperties.automato[j]['qX']);
         }
 
         tr.append(td);
@@ -229,10 +229,10 @@ function setAutomato(){
             let letterPlace = $('<td>');
             let letra = String.fromCharCode(k);
 
-            if (automatoProprieties.automato[j][letra] === null) {
+            if (automatoProperties.automato[j][letra] === null) {
                 letterPlace.html('-');
             } else {
-                letterPlace.html('q' + automatoProprieties.automato[j][letra]);
+                letterPlace.html('q' + automatoProperties.automato[j][letra]);
             }
 
             tr.append(letterPlace);
@@ -253,7 +253,7 @@ function automatoValidation(palavra, last){
     // Valida se existe uma palavra, ou se foi digitado um espaço ou algo foi apagado
     if(palavra || last == 32 || last == 8){
         // Apenas valida se existirem palavras no automato
-        if(automatoProprieties.palavras.length > 0){
+        if(automatoProperties.palavras.length > 0){
             let actualState = 0;
             let error = false;
 
@@ -267,7 +267,7 @@ function automatoValidation(palavra, last){
                 if(!error){
                     // Caso não tenha erro e a letra está dentro do alfabeto, valida se 
                     if(letra.charCodeAt(0) >= a && letra.charCodeAt(0) <= z){
-                        if(automatoProprieties.automato[actualState][letra] !== null){
+                        if(automatoProperties.automato[actualState][letra] !== null){
                             $("#foundWords").empty();
                             $("#searchWordInput").css("box-shadow", "5px 5px 20px 10px green")
                             $("#foundWords").append(`<h5 class="text-light">Palavras Possíveis</h5>`);
@@ -275,7 +275,7 @@ function automatoValidation(palavra, last){
                             $(`.state${actualState}`).addClass('table-success');
                             $(`.state${actualState}`).addClass('actual-state');
 
-                            actualState = automatoProprieties.automato[actualState][letra];
+                            actualState = automatoProperties.automato[actualState][letra];
                         } else {
                             $("#foundWords").empty();
                             $("#searchWordInput").css("box-shadow", "5px 5px 20px 10px red")
@@ -286,7 +286,7 @@ function automatoValidation(palavra, last){
                     }
 
                     if(last == 32 && i == (palavra.length) - 1){
-                        if(automatoProprieties.automato[actualState]['endState']){
+                        if(automatoProperties.automato[actualState]['endState']){
                             $("#automato tr").removeClass('actual-state');
                             $(`.state${actualState}`).addClass('table-success');
                             $(`.state${actualState}`).addClass('actual-state');
